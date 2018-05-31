@@ -3,7 +3,7 @@ Pin Connections
 ===================================      
 RFID Module       Tiva C TM4C1294XL LaunchPads        
 --------------    -----------------
-Pin 1  (SDA)      Pin 80 PG_1  (CS)
+Pin 1  (SDA)      Pin 52 PQ_1  (CS)
 Pin 2  (SCK)      Pin 64 PB_5 (SCK)
 Pin 3  (MOSI)     Pin 54 PQ_3(MOSI)
 Pin 4  (MISO)     Pin 55 PQ_2(MISO)
@@ -16,7 +16,7 @@ Pin 8  (3V3)      3V3
 #include "Mfrc522.h"
 #include <SPI.h>
 
-int CS = 80;                                 // chip select pin
+int CS = 52;                                 // chip select pin
 int NRSTDP = 56;
 Mfrc522 Mfrc522(CS,NRSTDP);
 unsigned char serNum[5];
