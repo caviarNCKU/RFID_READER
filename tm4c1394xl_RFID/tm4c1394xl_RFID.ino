@@ -28,7 +28,6 @@ void setup()
 
   SPI.begin();
   digitalWrite(CS, LOW);                    // Initialize the card reader
-  pinMode(RED_LED, OUTPUT);                 // Blink LED if card detected
   Mfrc522.Init();  
 }
 
@@ -56,7 +55,6 @@ void loop()
   memcpy(serNum, str, 5);
   if (status == MI_OK)
   {
-    digitalWrite(RED_LED, HIGH);              // Card or tag detected!
     Serial.print("The card's number is: ");
     Serial.print(serNum[0]);
     Serial.print(" , ");
@@ -70,7 +68,6 @@ void loop()
     Serial.println("");
  
     delay(1000);
-    digitalWrite(RED_LED, LOW); //blink when card deteced
   }
   /*command the card into sleepmode*/
   Mfrc522.Halt();	                        
