@@ -3,31 +3,38 @@ Pin Connections
 ===================================      
 RFID Module       Tiva C TM4C1294XL LaunchPads        
 --------------    -----------------
-Pin 1  (SDA)      Pin 52 PQ_1  (CS)
-Pin 2  (SCK)      Pin 64 PB_5 (SCK)
-Pin 3  (MOSI)     Pin 54 PQ_3(MOSI)
-Pin 4  (MISO)     Pin 55 PQ_2(MISO)
+Pin 1  (SDA)      Pin 63 PB_4 (CS(1))
+Pin 2  (SCK)      Pin 64 PB_5 (SCK(1))
+Pin 3  (MOSI)     Pin 2  PE_4 (MOSI(1))
+Pin 4  (MISO)     Pin 6  PE_5 (MISO(1))
 Pin 5  (IRQ)      Not connected
 Pin 6  (GND)      Pin 60 GND
-Pin 7  (RST)      Pin 56 RESET(NRSTDP)
+Pin 7  (RST)      Pin 54 PQ_3 RESET(NRSTDP)(MISO(5))
 Pin 8  (3V3)      3V3
 */
 
 #include "Mfrc522.h"
 #include <SPI.h>
 
-int CS = 52;                                 // chip select pin
-int NRSTDP = 56;
-Mfrc522 Mfrc522(CS,NRSTDP);
+int CS = 63;                                 // chip select pin
+int NRSTPD = 54;
+Mfrc522 Mfrc522(CS,NRSTPD);
 unsigned char serNum[5];
 
 void setup()
 {             
-  Serial.begin(9600);                        
+  Serial.begin(9600);
+  
+  SPI.setModule(1); // using SPI module 2...
+  pinMode(CS, OUTPUT); //moved this here from Mfrc522.cpp
+  digitalWrite(CS, LOW);
+  pinMode(NRSTPD, OUTPUT); //moved this here from Mfrc522.cpp
+  digitalWrite(NRSTPD, HIGH); //moved this here from     
+                      
   Serial.println("Starting RFID-RC522 MIFARE module demonstration...\n");
 
-  SPI.begin();
-  digitalWrite(CS, LOW);                    // Initialize the card reader
+  //SPI.begin();
+  //digitalWrite(CS, LOW);                    // Initialize the card reader
   Mfrc522.Init();  
 }
 
@@ -40,6 +47,7 @@ void loop()
   reqMode: Search method TagType: return card type
   return MI_OK if successed*/
   status = Mfrc522.Request(PICC_REQIDL, str);
+  
   if (status == MI_OK)
   {
     Serial.print("Card detected: ");
